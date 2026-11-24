@@ -18,6 +18,7 @@ fn main() {
     println!("cargo:rustc-check-cfg=cfg(nsh_has_paste_max_size)");
     println!("cargo:rustc-check-cfg=cfg(nsh_has_clip_path)");
     println!("cargo:rustc-check-cfg=cfg(nsh_has_pan_edge)");
+    println!("cargo:rustc-check-cfg=cfg(nsh_has_allow_origin)");
     println!("cargo:rustc-check-cfg=cfg(nsh_has_webview_zoomable)");
 
     // The checker must still compile against NSH checkouts predating these
@@ -81,6 +82,9 @@ fn main() {
     // `origin`.
     if nsh_core::js::host::declarations().contains("edge?: PanEdge;") {
         println!("cargo:rustc-cfg=nsh_has_pan_edge");
+    }
+    if specs.iter().any(|spec| spec.name == "allowOrigin") {
+        println!("cargo:rustc-cfg=nsh_has_allow_origin");
     }
     // Scroll views had `zoomable` first: the web view's is its own spec.
     if specs
